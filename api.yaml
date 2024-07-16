@@ -1,0 +1,212 @@
+openapi: 3.0.0
+info:
+  title: Messages API
+  description: API para envio de mensagens de texto e mídia via WhatsApp, e para processar mensagens recebidas do bot do WhatsApp.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+    description: Servidor local
+paths:
+  /messages/send:
+    post:
+      summary: Enviar mensagem de texto ou mídia
+      description: Envia uma mensagem de texto ou mídia para um número especificado.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: Token de autenticação.
+                  example: seu_token_aqui
+                number:
+                  type: string
+                  description: Número de telefone para envio da mensagem.
+                  example: 595985523065
+                body:
+                  type: string
+                  description: Corpo da mensagem de texto.
+                  example: "Sua mensagem"
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: Token de autenticação.
+                  example: seu_token_aqui
+                number:
+                  type: string
+                  description: Número de telefone para envio da mensagem.
+                  example: 595985523065
+                medias:
+                  type: string
+                  format: binary
+                  description: Arquivo de mídia para enviar.
+      responses:
+        '200':
+          description: Mensagem enviada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Mensagem enviada com sucesso
+        '400':
+          description: Erro na requisição
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Erro na requisição
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Não autorizado
+        '500':
+          description: Erro no servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Erro no servidor
+  /wbotMessageListenerWeb:
+    post:
+      summary: Processar mensagens recebidas do bot do WhatsApp
+      description: Processa as mensagens recebidas do bot do WhatsApp.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                wbot:
+                  type: object
+                  properties:
+                    sessionName:
+                      type: string
+                      description: Nome da sessão do bot do WhatsApp.
+                      example: mySession
+                    phone:
+                      type: string
+                      description: Número de telefone do bot do WhatsApp.
+                      example: 1234567890
+                companyId:
+                  type: integer
+                  description: ID da empresa.
+                  example: 123
+                messages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            description: ID da mensagem.
+                            example: message1
+                      content:
+                        type: string
+                        description: Conteúdo da mensagem.
+                        example: "Hello, this is a test message"
+                      timestamp:
+                        type: integer
+                        description: Timestamp da mensagem.
+                        example: 1625190000
+      responses:
+        '200':
+          description: Mensagem processada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Mensagem processada com sucesso
+        '400':
+          description: Erro na requisição
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Erro na requisição
+        '401':
+          description: Não autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Não autorizado
+        '500':
+          description: Erro no servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Erro no servidor
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Message:
+      type: object
+      properties:
+        number:
+          type: string
+        body:
+          type: string
+    MediaMessage:
+      type: object
+      properties:
+        number:
+          type: string
+        medias:
+          type: string
+          format: binary
+    ReceivedMessage:
+      type: object
+      properties:
+        key:
+          type: object
+          properties:
+            id:
+              type: string
+        content:
+          type: string
+        timestamp:
+          type: integer
+security:
+  - bearerAuth: []
