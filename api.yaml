@@ -18,14 +18,11 @@ paths:
             schema:
               type: object
               properties:
-                token:
-                  type: string
-                  description: Token de autenticação.
-                  example: seu_token_aqui
+               
                 number:
                   type: string
                   description: Número de telefone para envio da mensagem.
-                  example: 595985523065
+                  example: "55 51 2184-0361"
                 body:
                   type: string
                   description: Corpo da mensagem de texto.
