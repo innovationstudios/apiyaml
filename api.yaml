@@ -21,7 +21,7 @@ paths:
                 number:
                   type: string
                   description: Número de telefone para envio da mensagem.
-                  example: "55 51 2184-0361"
+                  example: "555121840361"
                 body:
                   type: string
                   description: Corpo da mensagem de texto.
@@ -37,7 +37,7 @@ paths:
                 number:
                   type: string
                   description: Número de telefone para envio da mensagem.
-                  example: 595985523065
+                  example: "555121840361"
                 medias:
                   type: string
                   format: binary
